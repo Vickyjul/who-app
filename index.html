@@ -13,43 +13,51 @@
         :root { --primary: #6366f1; --bg: #020617; --card: #0f172a; --text: #f8fafc; --input: #1e293b; --danger: #ef4444; }
         body.theme-lembut { --primary: #be185d; --bg: #fff1f2; --card: #ffffff; --text: #831843; --input: #fce7f3; }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; position: fixed; width: 100%; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); height: 100dvh; display: flex; justify-content: center; align-items: center; overflow: hidden; position: fixed; width: 100%; }
 
-        /* Container menyesuaikan tinggi layar HP asli */
-        .container { width: 100%; max-width: 450px; height: 100dvh; background: var(--card); display: flex; flex-direction: column; position: relative; }
+        .container { width: 100%; max-width: 450px; height: 100%; background: var(--card); display: flex; flex-direction: column; position: relative; }
         @media (min-width: 600px) { .container { height: 92vh; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); } }
 
-        /* FLOATING UI - Hanya muncul di Login */
-        .btn-float { position: fixed; width: 48px; height: 48px; border-radius: 14px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 1000; background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); color: #fff; }
+        /* VIDEO UI FIX */
+        #video-grid { position: fixed; inset: 0; background: #000; z-index: 9999; display: none; flex-direction: column; }
+        #remote-video { width: 100%; height: 100%; object-fit: cover; }
+        #local-video { position: absolute; top: 20px; right: 20px; width: 110px; height: 160px; border-radius: 12px; border: 2px solid var(--primary); object-fit: cover; background: #222; z-index: 10000; }
+        .call-tools { position: absolute; bottom: 50px; left: 0; width: 100%; display: flex; justify-content: center; gap: 25px; z-index: 10001; }
+        .btn-call-end { width: 65px; height: 65px; border-radius: 50%; background: var(--danger); border: none; color: white; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+
+        /* FLOATING UI */
+        .btn-float { position: fixed; width: 48px; height: 48px; border-radius: 14px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 1000; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); color: #fff; }
         .btn-notif { top: 15px; right: 15px; }
         .btn-theme { top: 15px; left: 15px; }
         .btn-admin { bottom: 15px; left: 15px; }
 
-        .overlay { position: absolute; inset: 0; background: var(--bg); z-index: 2000; padding: 25px; display: none; flex-direction: column; }
-        .overlay.open { display: flex; }
-
-        /* HEADER FIX */
-        header { padding: 15px; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; background: var(--card); z-index: 10; }
+        header { padding: 15px; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        #messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
         
-        /* CHAT AREA FIX */
-        #messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: transparent; }
-        
-        .msg { padding: 10px 14px; border-radius: 16px; max-width: 80%; font-size: 14px; line-height: 1.4; }
+        .msg { padding: 10px 14px; border-radius: 16px; max-width: 80%; font-size: 14px; }
         .msg.own { align-self: flex-end; background: var(--primary); color: white; border-bottom-right-radius: 2px; }
         .msg.other { align-self: flex-start; background: var(--input); border-bottom-left-radius: 2px; }
 
-        /* INPUT AREA FIX */
-        .input-area { padding: 10px 15px 25px 15px; display: flex; gap: 10px; border-top: 1px solid rgba(0,0,0,0.05); background: var(--card); flex-shrink: 0; }
+        .input-area { padding: 10px 15px 30px 15px; display: flex; gap: 10px; border-top: 1px solid rgba(0,0,0,0.05); flex-shrink: 0; background: var(--card); }
         @media (min-width: 600px) { .input-area { padding-bottom: 15px; } }
-
+        
         input { width: 100%; padding: 12px 15px; border-radius: 12px; border: none; background: var(--input); color: var(--text); outline: none; font-size: 16px; }
         .btn-action { width: 100%; padding: 15px; border-radius: 12px; border: none; background: var(--primary); color: white; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         
-        .is-admin { border: 1px solid #fbbf24; background: rgba(251, 191, 36, 0.05) !important; }
+        .overlay { position: absolute; inset: 0; background: var(--bg); z-index: 2000; padding: 25px; display: none; flex-direction: column; }
+        .overlay.open { display: flex; }
     </style>
 </head>
 <body>
+
+    <div id="video-grid">
+        <video id="local-video" autoplay muted playsinline></video>
+        <video id="remote-video" autoplay playsinline></video>
+        <div class="call-tools">
+            <button class="btn-call-end" onclick="endCall()"><i data-lucide="phone-off"></i></button>
+        </div>
+    </div>
 
     <div id="float-ui">
         <div class="btn-float btn-theme" onclick="openOv('ov-theme')"><i data-lucide="palette"></i></div>
@@ -59,23 +67,22 @@
 
     <div class="container">
         <div id="ov-admin" class="overlay">
-            <h3>Admin Dashboard</h3><br>
+            <h3>Admin Panel</h3><br>
             <div id="adm-login">
-                <input type="password" id="admPass" placeholder="Master Password">
+                <input type="password" id="admPass" placeholder="Password Admin">
                 <button class="btn-action" onclick="loginAdmin()">Verifikasi</button>
             </div>
             <div id="adm-panel" style="display:none;">
-                <button class="btn-action" style="background:#059669;" onclick="adminReply()">BALAS CHAT CUSTOMER</button>
+                <button class="btn-action" style="background:#059669;" onclick="adminReply()">BALAS CHAT CS</button>
                 <input type="text" id="targetRoom" placeholder="Room ID" style="margin-top:20px;">
                 <button class="btn-action btn-danger" onclick="adminAction('chat')">Hapus Chat</button>
-                <button class="btn-action btn-danger" style="margin-top:5px;" onclick="adminAction('pass')">Hapus Password</button>
-                <button class="btn-action btn-danger" style="margin-top:30px;" onclick="adminAction('all')">WIPE ALL DATABASE</button>
+                <button class="btn-action btn-danger" style="margin-top:40px;" onclick="adminAction('all')">WIPE ALL DATABASE</button>
             </div>
             <button onclick="closeOv()" style="margin-top:auto; background:none; border:none; color:var(--text); opacity:0.5;">Tutup</button>
         </div>
 
-        <div id="ov-notif" class="overlay"><h3>Notifikasi</h3><div id="notif-list" style="flex:1; margin-top:20px; opacity:0.5;">Belum ada aktivitas baru.</div><button onclick="closeOv()" class="btn-action">Tutup</button></div>
         <div id="ov-theme" class="overlay"><h3>Tema</h3><br><button class="btn-action" onclick="setTheme('dark')">Dark Mode</button><br><button class="btn-action" style="background:#be185d" onclick="setTheme('lembut')">Rose Mode</button><button onclick="closeOv()" style="margin-top:20px;">Tutup</button></div>
+        <div id="ov-notif" class="overlay"><h3>Notifikasi</h3><div id="notif-list" style="flex:1; margin-top:20px; opacity:0.5;">Belum ada panggilan baru.</div><button onclick="closeOv()" class="btn-action">Tutup</button></div>
 
         <div id="login-screen" style="padding:30px; display:flex; flex-direction:column; justify-content:center; height:100%;">
             <h1 style="text-align:center; font-size:4rem; color:var(--primary); font-weight:900; letter-spacing:-4px;">VIP</h1>
@@ -90,18 +97,18 @@
             <header>
                 <div style="display:flex; align-items:center; gap:10px;">
                     <div onclick="location.reload()" style="cursor:pointer; color:var(--primary);"><i data-lucide="chevron-left"></i></div>
-                    <b id="rtitle" style="font-size: 16px;">#ROOM</b>
+                    <b id="rtitle">#ROOM</b>
                     <i id="lock-icon" data-lucide="unlock" size="18" onclick="setRoomPass()" style="cursor:pointer; color:var(--primary);"></i>
                 </div>
                 <div style="display:flex; gap:18px; color:var(--primary);">
-                    <i data-lucide="phone" onclick="startCall(false)" style="cursor:pointer; width:20px;"></i>
-                    <i data-lucide="video" onclick="startCall(true)" style="cursor:pointer; width:20px;"></i>
+                    <i data-lucide="phone" onclick="makeCall(false)" style="cursor:pointer;"></i>
+                    <i data-lucide="video" onclick="makeCall(true)" style="cursor:pointer;"></i>
                 </div>
             </header>
             <div id="messages"></div>
             <div class="input-area">
                 <label style="cursor:pointer; color:var(--primary); display:flex; align-items:center;"><i data-lucide="paperclip"></i><input type="file" accept="image/*" style="display:none;" onchange="handlePap(this)"></label>
-                <input type="text" id="msgInp" placeholder="Ketik..." onkeypress="if(event.key==='Enter') sendMsg()">
+                <input type="text" id="msgInp" placeholder="Ketik pesan..." onkeypress="if(event.key==='Enter') sendMsg()">
                 <button onclick="sendMsg()" style="background:none; border:none; color:var(--primary);"><i data-lucide="send"></i></button>
             </div>
         </div>
@@ -113,20 +120,24 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let myUser, myRoom;
+        let myUser, myRoom, peer, localStream, currentCall;
 
         function openOv(id) { document.getElementById(id).classList.add('open'); }
         function closeOv() { document.querySelectorAll('.overlay').forEach(o => o.classList.remove('open')); }
         function setTheme(t) { document.body.className = t === 'lembut' ? 'theme-lembut' : ''; closeOv(); }
 
-        function toggleFloatUI(show) {
-            document.getElementById('float-ui').style.display = show ? 'block' : 'none';
+        async function checkRoom() {
+            myUser = document.getElementById('username').value.trim();
+            myRoom = document.getElementById('roomCode').value.trim().toLowerCase();
+            if(!myUser || !myRoom) return;
+            const snap = await db.ref(`roomData/${myRoom}`).once('value');
+            if(snap.exists() && snap.val().p && prompt("Password:") !== snap.val().p) return alert("Salah!");
+            startChat();
         }
 
         function contactAdmin() {
-            const user = document.getElementById('username').value.trim();
-            if(!user) return alert("Isi username dulu.");
-            myUser = user; myRoom = "admin-support";
+            myUser = document.getElementById('username').value.trim() || "User";
+            myRoom = "admin-support";
             startChat();
         }
 
@@ -135,38 +146,53 @@
             closeOv(); startChat();
         }
 
-        async function checkRoom() {
-            myUser = document.getElementById('username').value.trim();
-            myRoom = document.getElementById('roomCode').value.trim().toLowerCase();
-            if(!myUser || !myRoom) return;
-            const snap = await db.ref(`roomData/${myRoom}`).once('value');
-            if(snap.exists() && snap.val().p) {
-                const p = prompt("Password:");
-                if(p !== snap.val().p) return alert("Salah!");
-            }
-            startChat();
-        }
-
         function startChat() {
-            toggleFloatUI(false); // Sembunyikan tombol fitur saat masuk chat
+            document.getElementById('float-ui').style.display = 'none';
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('chat-screen').style.display = 'flex';
             document.getElementById('rtitle').innerText = "#" + myRoom;
+
+            // INIT PEER FOR CALLS
+            peer = new Peer(myUser + "-" + myRoom);
+            peer.on('open', () => console.log('Peer Ready'));
             
+            peer.on('call', async (call) => {
+                if(confirm("Panggilan Masuk. Terima?")) {
+                    localStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+                    document.getElementById('video-grid').style.display = 'flex';
+                    document.getElementById('local-video').srcObject = localStream;
+                    call.answer(localStream);
+                    call.on('stream', rs => document.getElementById('remote-video').srcObject = rs);
+                    currentCall = call;
+                }
+            });
+
             db.ref(`rooms/${myRoom}`).on('child_added', s => {
                 const d = s.val();
                 const div = document.createElement('div');
-                const isAdmin = d.u === "OFFICIAL ADMIN";
-                div.className = `msg ${d.u === myUser ? 'own' : 'other'} ${isAdmin ? 'is-admin' : ''}`;
-                div.innerHTML = `<small style="display:block; font-size:9px; font-weight:bold; margin-bottom:2px;">${isAdmin ? '??? ' : ''}${d.u}</small>${d.t || ''}${d.img ? `<img src="${d.img}" style="width:100%; border-radius:10px; margin-top:5px;">` : ''}`;
+                div.className = `msg ${d.u === myUser ? 'own' : 'other'} ${d.u === 'OFFICIAL ADMIN' ? 'is-admin' : ''}`;
+                div.innerHTML = `<small style="display:block; font-size:9px; font-weight:bold;">${d.u}</small>${d.t || ''}${d.img ? `<img src="${d.img}" style="width:100%; border-radius:10px; margin-top:5px;">` : ''}`;
                 document.getElementById('messages').appendChild(div);
                 document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
             });
+        }
 
-            db.ref(`roomData/${myRoom}/p`).on('value', snap => {
-                document.getElementById('lock-icon').setAttribute('data-lucide', snap.exists() ? 'lock' : 'unlock');
-                lucide.createIcons();
-            });
+        async function makeCall(v) {
+            const target = prompt("Masukkan Username teman yang ingin ditelpon:");
+            if(!target) return;
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({video: v, audio: true});
+                document.getElementById('video-grid').style.display = 'flex';
+                document.getElementById('local-video').srcObject = localStream;
+                currentCall = peer.call(target + "-" + myRoom, localStream);
+                currentCall.on('stream', rs => document.getElementById('remote-video').srcObject = rs);
+            } catch (e) { alert("Akses Kamera Ditolak"); }
+        }
+
+        function endCall() {
+            if(currentCall) currentCall.close();
+            if(localStream) localStream.getTracks().forEach(t => t.stop());
+            document.getElementById('video-grid').style.display = 'none';
         }
 
         function sendMsg() {
@@ -200,17 +226,15 @@
 
         function adminAction(type) {
             const t = document.getElementById('targetRoom').value.toLowerCase();
-            if(type === 'all') { if(confirm("Hapus semua?")) db.ref().remove(); }
+            if(type === 'all') { if(confirm("Hapus Semua?")) db.ref().remove(); }
             else if(type === 'chat') db.ref(`rooms/${t}`).remove();
-            else if(type === 'pass') db.ref(`roomData/${t}`).remove();
             alert("Selesai!");
         }
 
         async function setRoomPass() {
             const snap = await db.ref(`roomData/${myRoom}/p`).once('value');
             if(snap.exists()) {
-                const p = prompt("Password untuk buka:");
-                if(p === snap.val()) db.ref(`roomData/${myRoom}/p`).remove();
+                if(prompt("Pass untuk buka:") === snap.val()) db.ref(`roomData/${myRoom}/p`).remove();
             } else {
                 const p = prompt("Set Password:");
                 if(p) db.ref(`roomData/${myRoom}/p`).set(p);
