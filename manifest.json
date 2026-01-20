@@ -1,0 +1,15 @@
+{
+  "name": "VIP CHAT",
+  "short_name": "VIP CHAT",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/5968/5968756.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
